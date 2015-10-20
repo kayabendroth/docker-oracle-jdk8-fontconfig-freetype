@@ -2,7 +2,7 @@
 # includes the libraries fontconfig and freetype, which are required to
 # run PhantomJS for example.
 
-FROM kayabendroth:docker-oracle-jdk8
+FROM kayabendroth/oracle-jdk8:latest
 
 MAINTAINER Kay Abendroth "kay.abendroth@raxion.net"
 
