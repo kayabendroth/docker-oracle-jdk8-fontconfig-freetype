@@ -1,0 +1,41 @@
+machine:
+  services:
+    - docker
+  environment:
+    DOCKER_HUB_USER: kayabendroth
+    DOCKER_IMAGE_NAME: oracle-jdk8-fontconfig-freetype
+    DOCKER_IMAGE_TAG: latest
+    MERGE_SCRIPT_URL_PREFIX: https://raw.githubusercontent.com/kayabendroth/cd-utils/master/scripts/git
+    MERGE_SCRIPT: merge-to.sh
+    GIT_UPSTREAM_URL: git@github.com:kayabendroth/docker-oracle-jdk8-fontconfig-freetype.git
+    GIT_UPSTREAM_BRANCH_PRODUCTION: master
+
+dependencies:
+  cache_directories:
+    - ~/.docker
+  post:
+    # Cache Docker image layers.
+    - circleci/scripts/docker-cache-layers.sh -d ~/.docker
+
+test:
+  override:
+    # Test building the Docker image.
+    - docker build -t ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} .
+    # Check if 'java' and 'javac' can be called w/o errors.
+    - docker run -t -i ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} java -version
+    - docker run -t -i ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} javac -version
+
+deployment:
+  automerge:
+    branch: dev
+    commands:
+      - wget -O "/tmp/${MERGE_SCRIPT}" "${MERGE_SCRIPT_URL_PREFIX}/${MERGE_SCRIPT}" && chmod 750 "/tmp/${MERGE_SCRIPT}"
+      - /tmp/${MERGE_SCRIPT} -c "${CIRCLE_SHA1}" -e "${CIRCLE_BRANCH}" -t "${GIT_UPSTREAM_BRANCH_PRODUCTION}" -r "${GIT_UPSTREAM_URL}"
+
+  hub:
+    branch: master
+    commands:
+      - docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}"
+      - docker tag -f "`docker images | grep "${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" | awk '{ print $3 }'`" ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_NAME}
+      - docker push ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}
+

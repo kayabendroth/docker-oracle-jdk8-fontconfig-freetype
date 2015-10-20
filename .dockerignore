@@ -1,0 +1,8 @@
+# Git files.
+.git/
+.gitignore
+
+# CircleCI files.
+circle.yml
+circleci/
+
