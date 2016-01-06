@@ -22,8 +22,8 @@ test:
     # Test building the Docker image.
     - docker build -t ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} .
     # Check if 'java' and 'javac' can be called w/o errors.
-    - docker run -t -i ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} java -version
-    - docker run -t -i ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} javac -version
+    - docker run --rm -t -i ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} java -version
+    - docker run --rm -t -i ${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} javac -version
     # Check if the packages 'libfontconfig1' and 'libfreetype6' are installed.
     - dpkg -s libfontconfig1
     - dpkg -s libfreetype6
