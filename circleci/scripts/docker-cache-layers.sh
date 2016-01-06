@@ -57,7 +57,7 @@ else
 fi
 
 # Currently hard-coded. Change this!
-DOCKER_IMAGES='debian:jessie'
+DOCKER_IMAGES='kayabendroth/oracle-jdk8:latest'
 
 for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
     FILENAME="${DOCKER_IMAGE//[^a-zA-Z0-9]/-}"
