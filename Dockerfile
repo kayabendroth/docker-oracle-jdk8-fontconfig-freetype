@@ -20,7 +20,7 @@ ENV LANG     en_US.UTF-8
 ENV LC_ALL   en_US.UTF-8
 
 # Refresh line for up-to-date packages.
-ENV REFRESH_AT='2015-10-20'
+ENV REFRESH_AT='2016-01-06'
 
 # Update package lists.
 RUN apt-get -yqq update
