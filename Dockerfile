@@ -14,16 +14,16 @@ LABEL description="This image is used to provide a lightweight \
 LABEL version="0.1.0"
 
 
-# Refresh line for up-to-date packages.
-ENV REFRESH_AT='2015-10-20'
-
-# Update package lists.
-RUN apt-get -yqq update
-
 # Set locale.
 ENV LANGUAGE en_US.UTF-8
 ENV LANG     en_US.UTF-8
 ENV LC_ALL   en_US.UTF-8
+
+# Refresh line for up-to-date packages.
+ENV REFRESH_AT='2016-01-06'
+
+# Update package lists.
+RUN apt-get -yqq update
 
 # Install the libraries.
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
